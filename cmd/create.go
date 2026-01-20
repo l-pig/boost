@@ -7,7 +7,6 @@ import (
 	"strings"
 
 	"github.com/manifoldco/promptui"
-	"github.com/manifoldco/promptui/list"
 	"github.com/spf13/cobra"
 )
 
@@ -81,18 +80,6 @@ var createCmd = &cobra.Command{
 			}
 		}
 
-		i := make([]interface{}, 0)
-		i = append(i, "1")
-		i = append(i, "2")
-		i = append(i, "3")
-		i = append(i, "4")
-		l, err := list.New(i, len(i))
-		if err != nil {
-			fmt.Println(err)
-			return
-		}
-		promptui.Li
-		promptui.Prompt{Templates:}
 		config := generator.ProjectConfig{
 			ProjectName: projectName,
 			ModulePath:  modulePath,
