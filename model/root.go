@@ -122,7 +122,6 @@ func (r Root) View() string {
 			}(),
 		}
 
-		fmt.Printf("Creating project %s...\n", config.ProjectName)
 		if err := generator.Generate(config); err != nil {
 			fmt.Printf("Error generating project: %v\n", err)
 			os.Exit(1)
