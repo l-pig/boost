@@ -1,6 +1,8 @@
-module {{.ModulePath}
-import (
-{{ if useEnt }}
+module {{.Module}}
+require (
+     {{range .Dependencies}}
+     {{ . }}
+     {{ end }}
 )
 
 go 1.21

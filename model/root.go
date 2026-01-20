@@ -1,7 +1,10 @@
 package model
 
 import (
+	"boost/internal/generator"
 	"boost/model/component"
+	"fmt"
+	"os"
 	"strings"
 
 	tea "github.com/charmbracelet/bubbletea"
@@ -20,6 +23,16 @@ func NewRoot() tea.Model {
 		component.NewShortText("What is the project name?", "e.g. my-awesome-project"),
 		component.NewShortText("What is the module name?", "e.g. github.com/user/project"),
 		component.NewListSelect("Choose project type:", []string{"Web Application", "CLI Tool", "Library", "gRPC Service"}),
+		component.NewList("Choose Dependencies:", func() []string {
+			file, err := os.ReadFile("/home/l-pig/Coding/Go/boost/model/dependence.txt")
+			if err != nil {
+				panic(err)
+			}
+			split := strings.Split(string(file), "\n")
+
+			print(split)
+			return split
+		}()),
 	}
 
 	// 聚焦第一个问题
@@ -95,7 +108,25 @@ func (r Root) View() string {
 	}
 
 	if r.done {
+		for _, item := range r.questions {
+			b.WriteString(item.Result() + "\n")
+		}
 		b.WriteString(lipgloss.NewStyle().Bold(true).Foreground(lipgloss.Color("42")).Render("\nAll set! Generating project...\n"))
+		// 生成代码
+
+		config := generator.ProjectConfig{
+			ProjectName: r.questions[0].Value(),
+			Module:      r.questions[1].Value(),
+			Dependencies: func() []string {
+				return strings.Split(r.questions[3].Value(), ",")
+			}(),
+		}
+
+		fmt.Printf("Creating project %s...\n", config.ProjectName)
+		if err := generator.Generate(config); err != nil {
+			fmt.Printf("Error generating project: %v\n", err)
+			os.Exit(1)
+		}
 	}
 
 	return b.String()
