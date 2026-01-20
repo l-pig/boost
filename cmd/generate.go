@@ -47,7 +47,6 @@ var handlerCmd = &cobra.Command{
 
 func init() {
 	generateCmd.AddCommand(handlerCmd)
-	rootCmd.AddCommand(generateCmd)
 }
 
 func capitalize(s string) string {
