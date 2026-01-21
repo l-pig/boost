@@ -1,0 +1,38 @@
+package server
+
+import (
+	"fmt"
+	"net/http"
+	"time"
+)
+
+type Server struct {
+	port int
+}
+
+func New() *Server {
+	return &Server{
+		port: 8080,
+	}
+}
+
+func (s *Server) Start() error {
+	mux := http.NewServeMux()
+	mux.HandleFunc("/", s.handleHome)
+	
+	srv := &http.Server{
+		Addr:         fmt.Sprintf(":%d", s.port),
+		Handler:      mux,
+		ReadTimeout:  10 * time.Second,
+		WriteTimeout: 10 * time.Second,
+	}
+
+	fmt.Printf("Starting server on port %d\n", s.port)
+	return srv.ListenAndServe()
+}
+
+func (s *Server) handleHome(w http.ResponseWriter, r *http.Request) {
+	w.WriteHeader(http.StatusOK)
+	w.Write([]byte("Hello from your new Web App!"))
+}
+

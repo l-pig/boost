@@ -74,8 +74,7 @@ func (l *List) Result() string {
 	label := strings.TrimSuffix(strings.TrimSpace(l.label), ":")
 	items := make([]string, 0)
 	for key := range l.choice {
-		split := strings.Split(key, "，")
-		items = append(items, split[0])
+		items = append(items, key)
 	}
 	return fmt.Sprintf("%s: %s", label, BlurredStyle.Render(strings.Join(items, ",")))
 }
@@ -91,8 +90,7 @@ func (l *List) Blur() tea.Cmd {
 func (l *List) Value() string {
 	items := make([]string, 0)
 	for key := range l.choice {
-		split := strings.Split(key, "，")
-		items = append(items, split[0])
+		items = append(items, key)
 	}
 	return strings.Join(items, ",")
 }
